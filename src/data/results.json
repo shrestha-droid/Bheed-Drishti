@@ -1,0 +1,146 @@
+{
+  "normal": {
+    "fixed": {
+      "peakZone": 2.23,
+      "peakLocal": 4.48,
+      "dangerMin": 0,
+      "criticalMin": 0,
+      "personDangerMin": 22,
+      "bathed": 2243,
+      "departed": 1730,
+      "onsite": 2135,
+      "held": 0
+    },
+    "ai": {
+      "peakZone": 1.49,
+      "peakLocal": 3.57,
+      "dangerMin": 0,
+      "criticalMin": 0,
+      "personDangerMin": 0,
+      "bathed": 2148,
+      "departed": 1560,
+      "onsite": 2305,
+      "held": 0
+    }
+  },
+  "snan": {
+    "fixed": {
+      "peakZone": 6.32,
+      "peakLocal": 10.59,
+      "dangerMin": 6.04,
+      "criticalMin": 4.13,
+      "personDangerMin": 20352,
+      "bathed": 3462,
+      "departed": 1430,
+      "onsite": 8054,
+      "held": 0
+    },
+    "ai": {
+      "peakZone": 3.29,
+      "peakLocal": 5,
+      "dangerMin": 0,
+      "criticalMin": 0,
+      "personDangerMin": 398,
+      "bathed": 3933,
+      "departed": 2611,
+      "onsite": 5572,
+      "held": 4035
+    }
+  },
+  "jam": {
+    "fixed": {
+      "peakZone": 4.53,
+      "peakLocal": 6.46,
+      "dangerMin": 8.25,
+      "criticalMin": 0,
+      "personDangerMin": 9066,
+      "bathed": 3873,
+      "departed": 1625,
+      "onsite": 5472,
+      "held": 0
+    },
+    "ai": {
+      "peakZone": 2.92,
+      "peakLocal": 4.76,
+      "dangerMin": 0,
+      "criticalMin": 0,
+      "personDangerMin": 85,
+      "bathed": 3401,
+      "departed": 2411,
+      "onsite": 4573,
+      "held": 462
+    }
+  },
+  "rumour": {
+    "fixed": {
+      "peakZone": 5.54,
+      "peakLocal": 7.93,
+      "dangerMin": 7.13,
+      "criticalMin": 2.64,
+      "personDangerMin": 13722,
+      "bathed": 2860,
+      "departed": 1185,
+      "onsite": 6309,
+      "held": 0
+    },
+    "ai": {
+      "peakZone": 2.35,
+      "peakLocal": 4.06,
+      "dangerMin": 0,
+      "criticalMin": 0,
+      "personDangerMin": 0,
+      "bathed": 3827,
+      "departed": 2921,
+      "onsite": 4525,
+      "held": 240
+    }
+  },
+  "convoy": {
+    "fixed": {
+      "peakZone": 6.17,
+      "peakLocal": 9.1,
+      "dangerMin": 2.67,
+      "criticalMin": 1.36,
+      "personDangerMin": 4918,
+      "bathed": 3309,
+      "departed": 2313,
+      "onsite": 4342,
+      "held": 0
+    },
+    "ai": {
+      "peakZone": 2.42,
+      "peakLocal": 4.15,
+      "dangerMin": 0,
+      "criticalMin": 0,
+      "personDangerMin": 0,
+      "bathed": 2979,
+      "departed": 2688,
+      "onsite": 3139,
+      "held": 1256
+    }
+  },
+  "rain": {
+    "fixed": {
+      "peakZone": 3.59,
+      "peakLocal": 5.14,
+      "dangerMin": 0,
+      "criticalMin": 0,
+      "personDangerMin": 2904,
+      "bathed": 2163,
+      "departed": 1123,
+      "onsite": 5532,
+      "held": 0
+    },
+    "ai": {
+      "peakZone": 3.24,
+      "peakLocal": 4.5,
+      "dangerMin": 0,
+      "criticalMin": 0,
+      "personDangerMin": 186,
+      "bathed": 1924,
+      "departed": 1429,
+      "onsite": 4456,
+      "held": 2436
+    }
+  }
+}

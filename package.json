@@ -1,0 +1,27 @@
+{
+  "name": "bheed-drishti",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Crowd-safety digital twin for mass gatherings: clay diorama, social-force crowd simulation, density/flow/count lenses, and fixed-plan vs AI-guided routing comparison.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "build:single": "tsc --noEmit && vite build --mode single",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "bench": "node --experimental-strip-types --no-warnings scripts/benchmark.ts"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/three": "^0.170.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "vite-plugin-singlefile": "^2.1.0",
+    "vitest": "^2.1.8"
+  }
+}

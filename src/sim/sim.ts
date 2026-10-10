@@ -192,6 +192,7 @@ export class Sim {
   gateRate = new Float32Array(GATES.length); // people per minute (EMA)
   series: SeriesPoint[] = [];
   log: LogEntry[] = [];
+  logTotal = 0;
   measureTimer = 0;
   histTimer = 0;
   flowToggle = 0;
@@ -496,6 +497,7 @@ export class Sim {
 
   addLog(kind: LogKind, text: string, zone?: number) {
     this.log.push({ t: this.t, sim: this.simIndex, kind, text, zone });
+    this.logTotal++;
     if (this.log.length > 400) this.log.splice(0, this.log.length - 400);
   }
 
@@ -1055,6 +1057,7 @@ export class Sim {
     this.bathed = 0; this.departed = 0; this.tripSum = 0; this.spawned = 0;
     this.series = [];
     this.log = [];
+    this.logTotal = 0;
     for (const z of this.zone) z.dangerTime = 0;
     for (let i = 0; i < this.hi; i++) this.spawnT[i] = 0;
     this.zoneAlert.fill(0);

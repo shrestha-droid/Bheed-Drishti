@@ -53,18 +53,33 @@ export class Engine {
 
   /** Fill the town (fixed plan, base load), then clone it so both plans start identical. */
   warmup(seconds = 420, onProgress?: (p: number) => void) {
-    const shared = getShared();
-    const s0 = new Sim(shared, 'fixed', 0, this.seed);
+    this.beginWarmup(seconds);
+    while (!this.warmupChunk(200)) onProgress?.(this.warmupProgress);
+    onProgress?.(1);
+  }
+
+  private warmSteps = 0;
+  private warmDone = 0;
+  get warmupProgress() { return this.warmSteps ? this.warmDone / this.warmSteps : 1; }
+
+  beginWarmup(seconds = 420) {
+    const s0 = new Sim(getShared(), 'fixed', 0, this.seed);
     this.sims = [s0];
     this.t = -seconds;
     this.nextTrain = -seconds + 5;
-    const steps = Math.round(seconds / DT);
-    for (let k = 0; k < steps; k++) {
+    this.warmSteps = Math.round(seconds / DT);
+    this.warmDone = 0;
+  }
+
+  /** Advance the warm-up by up to n steps; returns true (and forks the two plans) when finished. */
+  warmupChunk(n: number): boolean {
+    const s0 = this.sims[0];
+    for (let k = 0; k < n && this.warmDone < this.warmSteps; k++, this.warmDone++) {
       this.arrivals(DT, true);
       s0.step(DT);
       this.t += DT;
-      if (onProgress && k % 200 === 0) onProgress(k / steps);
     }
+    if (this.warmDone < this.warmSteps) return false;
     this.t = 0;
     const s1 = s0.clone('ai', 1, this.seed + 1);
     s0.resetMetrics();
@@ -72,7 +87,7 @@ export class Engine {
     s0.controller = new FixedPlan();
     s1.controller = new AIController(this.scenario);
     this.sims = [s0, s1];
-    onProgress?.(1);
+    return true;
   }
 
   step() {

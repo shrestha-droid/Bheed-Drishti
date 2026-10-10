@@ -211,6 +211,36 @@ export class View {
     cam.updateProjectionMatrix();
   }
 
+  private droneRT = new THREE.WebGLRenderTarget(320, 200);
+  private droneCam = new THREE.OrthographicCamera(-25, 25, 15.6, -15.6, 1, 200);
+  private dronePixels = new Uint8Array(320 * 200 * 4);
+  /** Top-down "drone camera" frame over a sim-space window; returns raw RGBA pixels (bottom-up rows). */
+  renderDrone(sim: number, cx: number, cz: number): Uint8Array {
+    const cam = this.droneCam;
+    cam.position.set(SX(cx), 60, SZ(cz));
+    cam.up.set(0, 0, -1);
+    cam.lookAt(SX(cx), 0, SZ(cz));
+    cam.updateProjectionMatrix();
+    const vis = this.pilgrims.map(p => p.mesh.visible);
+    const lensVis = [this.density.mesh.visible, this.count.group.visible];
+    this.pilgrims[0].mesh.visible = sim === 0;
+    this.pilgrims[1].mesh.visible = sim === 1;
+    this.density.mesh.visible = false;
+    this.count.group.visible = false;
+    const flowVis = [...this.flow.meshes, ...this.flow.clash].map(m => m.visible);
+    [...this.flow.meshes, ...this.flow.clash].forEach(m => (m.visible = false));
+    const r = this.renderer;
+    r.setRenderTarget(this.droneRT);
+    r.render(this.scene, cam);
+    r.readRenderTargetPixels(this.droneRT, 0, 0, 320, 200, this.dronePixels);
+    r.setRenderTarget(null);
+    this.pilgrims.forEach((p, k) => (p.mesh.visible = vis[k]));
+    this.density.mesh.visible = lensVis[0];
+    this.count.group.visible = lensVis[1];
+    [...this.flow.meshes, ...this.flow.clash].forEach((m, k) => (m.visible = flowVis[k]));
+    return this.dronePixels;
+  }
+
   lite = false;
   /** Cheaper rendering for slow GPUs: 1× pixels, smaller shadows, no crowd shadows, no tilt-shift. */
   setLite(on: boolean) {

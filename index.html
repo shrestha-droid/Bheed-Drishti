@@ -63,8 +63,15 @@
         <button data-cam="lanes" title="Bazaar Lane and the temple">Lanes</button>
         <button data-cam="station" title="Station forecourt">Station</button>
       </div>
+      <div class="rail-sep"></div>
+      <button class="drone-toggle" id="droneToggle" title="Drone camera with head-count detections" aria-pressed="true">Drone<br>feed</button>
     </nav>
 
+    <figure class="drone" id="drone">
+      <canvas id="droneCanvas" width="320" height="200" aria-label="Simulated drone camera over Ram Kund with head detections"></canvas>
+      <figcaption><span class="rec"></span><span id="droneTitle">DRONE-02 · RAM KUND</span><span id="droneCount" class="mono"></span></figcaption>
+      <button class="drone-x" id="droneClose" aria-label="Hide drone feed">×</button>
+    </figure>
     <div class="legend" id="legend"></div>
     <div class="hint" id="hint">Click any lane, ghat or plaza to inspect it</div>
 

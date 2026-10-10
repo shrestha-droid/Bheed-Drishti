@@ -71,6 +71,9 @@ export class Pilgrims {
     this.mesh.receiveShadow = false;
   }
 
+  /** latest agent buffer: x, z, heading, packed flags per agent */
+  get latest() { return { hi: this.hi, buf: this.cur }; }
+
   /** New frame from the simulation (simulation time t). */
   push(t: number, hi: number, buf: Float32Array) {
     const tmp = this.prev;

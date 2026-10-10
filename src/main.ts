@@ -527,6 +527,7 @@ function loop() {
   view.frame({ rain, convoy: sc.events.find(e => e.kind === 'convoy') }, rainOn);
   placeLabels();
   placeInspect();
+  updateDrone();
   if (st.ready) {
     $('clock').textContent = fmtClock(sc.clockStart + t);
     const now = sc.events.find(e => t >= e.t && t < (e.end ?? e.t + 45));
@@ -535,10 +536,65 @@ function loop() {
   }
 }
 
+// ------------------------------------------------------------------ drone feed
+const droneEl = $('drone');
+const droneCv = $<HTMLCanvasElement>('droneCanvas');
+const droneCtx = droneCv.getContext('2d')!;
+const droneImg = droneCtx.createImageData(320, 200);
+let droneOn = window.innerWidth > 700;
+function setDrone(on: boolean) {
+  droneOn = on;
+  droneEl.hidden = !on;
+  $('droneToggle').setAttribute('aria-pressed', String(on));
+}
+$('droneToggle').onclick = () => setDrone(!droneOn);
+$('droneClose').onclick = () => setDrone(false);
+let lastDrone = 0;
+function updateDrone() {
+  if (!droneOn || !st.ready || performance.now() - lastDrone < 350) return;
+  lastDrone = performance.now();
+  // the feed follows the drone hovering over Ram Kund
+  const a = view.elapsed * 0.25;
+  const cx = 119 + Math.sin(a) * 18, cz = 140 + Math.sin(a * 2) * 6;
+  const sim = st.mode === 'fixed' ? 0 : 1;
+  const px = view.renderDrone(sim, cx, cz);
+  const d = droneImg.data;
+  for (let y = 0; y < 200; y++) {
+    const src = (199 - y) * 320 * 4, dst = y * 320 * 4;
+    for (let x = 0; x < 320; x++) {
+      const i = src + x * 4, o = dst + x * 4;
+      const lum = (0.3 * px[i] + 0.59 * px[i + 1] + 0.11 * px[i + 2]) / 255;
+      const g = Math.min(255, Math.pow(lum, 0.45) * 265 + ((x * 7 + y * 13 + lastDrone) % 9) - 4);
+      d[o] = g * 0.92; d[o + 1] = g; d[o + 2] = g * 0.95; d[o + 3] = 255;
+    }
+  }
+  droneCtx.putImageData(droneImg, 0, 0);
+  // head detections (what the CV model would draw)
+  const { hi, buf } = view.pilgrims[sim].latest;
+  droneCtx.strokeStyle = '#4dff88';
+  droneCtx.lineWidth = 1;
+  let n = 0;
+  for (let i = 0; i < hi; i++) {
+    if (buf[i * 4 + 3] < 0) continue;
+    const x = ((buf[i * 4] - (cx - 25)) / 50) * 320, y = ((buf[i * 4 + 1] - (cz - 15.6)) / 31.2) * 200;
+    if (x < 2 || y < 2 || x > 318 || y > 198) continue;
+    n++;
+    droneCtx.strokeRect(Math.round(x) - 2.5, Math.round(y) - 2.5, 5, 5);
+  }
+  droneCtx.fillStyle = 'rgba(13,15,20,0.7)';
+  droneCtx.fillRect(4, 4, 112, 16);
+  droneCtx.fillStyle = '#4dff88';
+  droneCtx.font = '500 11px "IBM Plex Mono", monospace';
+  droneCtx.fillText(`${sim ? 'AI' : 'FIXED'} · ${fmtClock(st.scenario.clockStart + view.simTime)}`, 8, 15);
+  const est = Math.round(n * (1 + Math.sin(lastDrone * 0.001) * 0.03));
+  $('droneCount').textContent = `${est} heads`;
+}
+
 // debugging / scripted screenshots
 (window as unknown as { __bd: unknown }).__bd = { view, st, openInspect, setLens, setMode, start, showReport };
 
 // ------------------------------------------------------------------ boot
+setDrone(droneOn);
 setLens('clay');
 setMode(window.innerWidth < 700 ? 'ai' : 'split');
 renderLegend();

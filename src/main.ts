@@ -486,7 +486,7 @@ function showReport() {
   const fd = f.dangerTime / 60, ad = a.dangerTime / 60;
   $('repTitle').textContent = fd > 0.05
     ? `AI-guided routing cut time in the danger zone from ${fd.toFixed(1)} to ${ad.toFixed(1)} minutes`
-    : `Both plans stayed out of the danger zone; AI kept the peak at ${a.peakZone.toFixed(1)} p/m²`;
+    : `Both plans stayed below the danger line (peak ${f.peakZone.toFixed(1)} fixed, ${a.peakZone.toFixed(1)} AI p/m²)`;
   $('repLede').textContent = `Same town, same arrivals, same ${Math.round(sc.duration / 60)} minutes. The densest zone peaked at ${f.peakZone.toFixed(1)} p/m² under the fixed barricade plan and ${a.peakZone.toFixed(1)} p/m² under AI-guided routing, which took ${a.actions} control actions and served ${a.bathed.toLocaleString('en-IN')} bathers against ${f.bathed.toLocaleString('en-IN')}.`;
   const rows: [string, number, number, (v: number) => string, string][] = [
     ['Peak zone density', f.peakZone, a.peakZone, v => `${v.toFixed(1)} p/m²`, 'lower is safer'],

@@ -274,8 +274,12 @@ button:focus-visible, summary:focus-visible { outline: 2px solid var(--saffron);
   .view-seg button { padding: 7px 7px; font-size: 13px; }
   .clock #clock { font-size: 17px; }
   .scenario-btn #scenarioName { max-width: 150px; }
-  .lens-rail { width: 62px; }
-  .cam-presets { display: none; }
+  .lens-rail { flex-direction: row; width: auto; top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: space-between; padding: 4px; }
+  .lens-rail > button { flex: 1; padding: 6px 2px 4px; }
+  .lens-rail kbd, .rail-sep, .cam-presets { display: none; }
+  .drone-toggle { flex: 1; }
+  .legend { bottom: 76px; }
+  .viewtag.left, .split-off .viewtag.left { left: 12px; }
   .cards { grid-template-columns: 1fr; }
   .viewtag { font-size: 12px; padding: 5px 8px; }
   .viewtag.right { left: calc(50% + 6px); }

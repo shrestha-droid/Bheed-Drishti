@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bheed Drishti</title>
+<meta name="description" content="Crowd-safety digital twin for mass gatherings: a clay temple town with thousands of simulated pilgrims, density / flow / count lenses, and fixed barricade plans compared with AI-guided crowd routing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <script type="module" crossorigin src="./assets/index-Df-QvFrn.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-fkV_0n0o.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M2 16c4-7 9-10 14-10s10 3 14 10c-4 7-9 10-14 10S6 23 2 16z" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="16" cy="16" r="5.2" fill="var(--saffron)"/><circle cx="16" cy="16" r="2" fill="currentColor"/></svg>
+      <div class="brand-text"><strong>Bheed Drishti</strong><span lang="hi">भीड़ दृष्टि · crowd-safety twin</span></div>
+    </div>
+    <button id="scenarioBtn" class="scenario-btn" aria-haspopup="dialog">
+      <span class="eyebrow">Scenario</span>
+      <span id="scenarioName">Amrit Snan bathing hour</span>
+      <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    </button>
+    <div class="clock" aria-live="polite">
+      <span id="clock" class="mono">03:50:00</span>
+      <span id="eventNow" class="event-now"></span>
+    </div>
+    <div class="controls">
+      <button id="playBtn" class="icon-btn" title="Play / pause (Space)" aria-label="Pause">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path id="playIcon" d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg>
+      </button>
+      <div class="seg" id="speedSeg" role="group" aria-label="Simulation speed">
+        <button data-speed="1">1×</button><button data-speed="2">2×</button><button data-speed="4" class="on">4×</button><button data-speed="8">8×</button>
+      </div>
+      <button id="restartBtn" class="icon-btn" title="Restart scenario" aria-label="Restart scenario">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8a4.5 4.5 0 1 0 1.4-3.3M3.5 2.5v2.8h2.8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+    </div>
+    <div class="seg view-seg" id="viewSeg" role="group" aria-label="Which plan to show">
+      <button data-view="fixed"><i class="dot fixed"></i>Fixed plan</button>
+      <button data-view="split" class="on">Side by side</button>
+      <button data-view="ai"><i class="dot ai"></i>AI-guided</button>
+    </div>
+    <button id="aboutBtn" class="icon-btn" title="How it works" aria-label="How it works">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </header>
+
+  <main id="stage">
+    <div id="labels"></div>
+    <div class="viewtag left" id="tagLeft"><i class="dot fixed"></i>Fixed barricade plan</div>
+    <div class="viewtag right" id="tagRight"><i class="dot ai"></i>AI-guided routing</div>
+
+    <nav class="lens-rail" aria-label="Lens">
+      <button data-lens="clay" class="on"><svg viewBox="0 0 20 20"><path d="M3 14l7-9 7 9z M6 14v3h8v-3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Clay</span><kbd>1</kbd></button>
+      <button data-lens="density"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".45"/><circle cx="10" cy="10" r="4.4" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".75"/><circle cx="10" cy="10" r="1.8" fill="currentColor"/></svg><span>Density</span><kbd>2</kbd></button>
+      <button data-lens="flow"><svg viewBox="0 0 20 20"><path d="M3 7h11m-3-3l3 3-3 3M17 13H6m3-3l-3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Flow</span><kbd>3</kbd></button>
+      <button data-lens="count"><svg viewBox="0 0 20 20"><rect x="3" y="3" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M14 11v6M11 14h6" stroke="currentColor" stroke-width="1.5"/></svg><span>Count</span><kbd>4</kbd></button>
+      <div class="rail-sep"></div>
+      <div class="cam-presets" aria-label="Camera">
+        <button data-cam="overview" title="Whole precinct">Overview</button>
+        <button data-cam="ghat" title="Ram Kund and the footbridge">Ram Kund</button>
+        <button data-cam="lanes" title="Bazaar Lane and the temple">Lanes</button>
+        <button data-cam="station" title="Station forecourt">Station</button>
+      </div>
+      <div class="rail-sep"></div>
+      <button class="drone-toggle" id="droneToggle" title="Drone camera with head-count detections" aria-pressed="true">Drone<br>feed</button>
+    </nav>
+
+    <figure class="drone" id="drone">
+      <canvas id="droneCanvas" width="320" height="200" aria-label="Simulated drone camera over Ram Kund with head detections"></canvas>
+      <figcaption><span class="rec"></span><span id="droneTitle">DRONE-02 · RAM KUND</span><span id="droneCount" class="mono"></span></figcaption>
+      <button class="drone-x" id="droneClose" aria-label="Hide drone feed">×</button>
+    </figure>
+    <div class="legend" id="legend"></div>
+    <div class="hint" id="hint">Click any lane, ghat or plaza to inspect it</div>
+
+    <div id="inspect" class="inspect" hidden role="dialog" aria-label="Zone inspector">
+      <button class="close" id="inspectClose" aria-label="Close inspector">×</button>
+      <div class="insp-plan" id="inspPlan"></div>
+      <h3 id="inspTitle">Ghat 3</h3>
+      <p class="insp-line mono" id="inspLine"></p>
+      <div class="insp-main">
+        <div class="insp-big"><span id="inspDensity">0.0</span><small>p/m²</small></div>
+        <div class="insp-state" id="inspState"></div>
+      </div>
+      <canvas id="inspSpark" width="300" height="70"></canvas>
+      <dl class="insp-grid">
+        <div><dt>Head count</dt><dd id="inspCount">0</dd></div>
+        <div><dt>Walking speed</dt><dd id="inspSpeed">0</dd></div>
+        <div><dt>Counter-flow</dt><dd id="inspCf">0</dd></div>
+        <div><dt>Crowd pressure</dt><dd id="inspPressure">0</dd></div>
+      </dl>
+      <div class="insp-action">
+        <span class="eyebrow" id="inspActionLabel">Recommended action</span>
+        <p id="inspAction"></p>
+      </div>
+    </div>
+
+    <div id="loading" class="loading">
+      <div class="loading-card">
+        <span class="eyebrow">Seeding the precinct</span>
+        <strong id="loadingText">Filling the town with pilgrims…</strong>
+        <div class="bar"><i id="loadingBar"></i></div>
+        <small>Seven minutes of ordinary traffic run first, so both plans start from the same busy town.</small>
+      </div>
+    </div>
+  </main>
+
+  <aside class="panel" id="panel">
+    <button class="panel-toggle" id="panelToggle" aria-expanded="true">Results</button>
+    <section class="kpis">
+      <div class="kpi-head"><span></span><span><i class="dot fixed"></i>Fixed</span><span><i class="dot ai"></i>AI</span></div>
+      <div id="kpiRows"></div>
+    </section>
+    <section class="chart-wrap">
+      <div class="sec-title"><span>Densest zone, p/m²</span><span class="chart-key"><i class="key fixed"></i>Fixed <i class="key ai"></i>AI</span></div>
+      <canvas id="chart"></canvas>
+    </section>
+    <section class="log-wrap">
+      <div class="sec-title"><span>Control-room log</span>
+        <div class="seg small" id="logSeg"><button data-log="ai" class="on">AI actions</button><button data-log="alert">Alerts</button><button data-log="all">All</button></div>
+      </div>
+      <ol id="log" class="log"></ol>
+    </section>
+  </aside>
+
+  <footer class="timeline">
+    <span class="mono" id="tStart">03:50</span>
+    <div class="track" id="track"><div class="fill" id="trackFill"></div><div id="trackMarks"></div></div>
+    <span class="mono" id="tEnd">04:02</span>
+    <span class="perf mono" id="perf"></span>
+  </footer>
+</div>
+
+<dialog id="intro" class="modal wide">
+  <div class="intro-grid">
+    <div class="intro-copy">
+      <span class="eyebrow">Crowd-safety digital twin for mass gatherings</span>
+      <h1>Bheed Drishti</h1>
+      <p class="lede">A clay model of a temple town on a river: ghats, narrow lanes, a footbridge, barricades and gates, a railway station. Every figure is one pilgrim walking under a social-force crowd model.</p>
+      <p>Two copies of the same town start from the same crowd and receive exactly the same arrivals. On the left, police follow the printed barricade plan. On the right, an AI controller reads the cameras every two seconds, forecasts density three minutes ahead and acts: gates, one-way lanes, a holding ground and PA announcements.</p>
+      <p class="muted">Above about 4 people per m², a crowd crush becomes possible. We measure the peak density and the minutes any zone spends above that line.</p>
+    </div>
+    <div class="intro-pick">
+      <span class="eyebrow">Pick a scenario</span>
+      <div id="scenarioCards" class="cards"></div>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="report" class="modal">
+  <button class="close" data-close aria-label="Close">×</button>
+  <span class="eyebrow" id="repEyebrow">Result</span>
+  <h2 id="repTitle"></h2>
+  <p class="lede" id="repLede"></p>
+  <div id="repBars" class="rep-bars"></div>
+  <details class="bench">
+    <summary>All six scenarios (headless benchmark, same seed)</summary>
+    <div class="table-wrap"><table id="benchTable"></table></div>
+  </details>
+  <div class="rep-actions">
+    <button id="repReplay" class="btn ghost">Replay</button>
+    <button id="repNext" class="btn">Next scenario</button>
+  </div>
+</dialog>
+
+<dialog id="about" class="modal">
+  <button class="close" data-close aria-label="Close">×</button>
+  <span class="eyebrow">How it works</span>
+  <h2>What is under the hood</h2>
+  <div class="about-cols">
+    <div>
+      <h4>Crowd model</h4>
+      <p>Each pilgrim is a disc (radius 0.20–0.25 m) driven by a social-force model (Helbing &amp; Molnár): a pull toward the next destination along a shortest-path field, exponential repulsion from neighbours and walls, body contact when people touch, and a keep-left bias that lets two-way lanes form. People stuck in a jam grow impatient and push harder, which is how crush densities above 5 p/m² build up.</p>
+      <h4>Measurements</h4>
+      <p>Local density is a smoothed head count per square metre. A zone's density is the density its people actually experience (person-weighted). Counter-flow is the share of walkers moving against the zone's main direction. Crowd pressure is density × velocity variance, the turbulence signal found in the 2006 Hajj analysis.</p>
+    </div>
+    <div>
+      <h4>The two plans</h4>
+      <p><b>Fixed plan:</b> the printed barricade plan. Gates never move and nobody is told about a jammed gate or a cordon until they reach it.</p>
+      <p><b>AI-guided:</b> reads zone head counts with ±4 % camera error, forecasts three minutes ahead and acts: one-way lanes (in by Gates F and D, out by B and J), reroutes pilgrims to emptier ghats by PA and signage, holds new arrivals at the Holding Ground and releases them in batches, broadcasts jams and cordons, calms a rumour run, and opens covered shelters in rain.</p>
+      <h4>The real version</h4>
+      <p>Live head counts would come from density-map computer vision on CCTV and drone video, with gate, PA and signage control wired to the same loop. This demo replaces the cameras with the simulation's own counts.</p>
+    </div>
+  </div>
+  <p class="muted small">Simulated precinct: 280 × 210 m, 1 m grid, 0.1 s time step, up to ~8,000 pilgrims per plan. Each figure is one person.</p>
+</dialog>
+</body>
+</html>
